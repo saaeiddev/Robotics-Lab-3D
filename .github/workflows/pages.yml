@@ -7,7 +7,7 @@ permissions:
   contents: read
 concurrency:
   group: robotics-pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,19 +21,6 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run check:dist
-      - name: Install Chromium for acceptance tests
-        run: npx playwright install --with-deps chromium
-      - name: Desktop and mobile browser acceptance tests
-        run: npm run test:e2e
-      - name: Save browser evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: browser-test-evidence
-          path: |
-            test-results/
-            playwright-report/
-          retention-days: 14
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
@@ -53,3 +40,27 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+  acceptance:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Install Chromium for browser acceptance tests
+        run: npx playwright install --with-deps chromium
+      - name: Desktop and mobile browser acceptance tests
+        run: npm run test:e2e
+      - name: Save browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-test-evidence
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 14
