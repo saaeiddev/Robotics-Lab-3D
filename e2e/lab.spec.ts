@@ -5,7 +5,7 @@ test.afterEach(()=>expect(errors).toEqual([]));
 test('five robot systems render with a valid WebGL context',async({page})=>{
  for(const [id,name,title] of [['humanoid','Humanoid robot','NEXUS H–01'],['arm','Industrial arm','AXIS R–06'],['rover','Autonomous rover','TERRA X–04'],['hand','Robotic hand','DEXTER H–05'],['sensors','Sensors & perception','SENSE P–06']]){
   await page.getByRole('button',{name:new RegExp(name)}).click();await expect(page.getByRole('heading',{level:2,name:new RegExp(title)})).toBeVisible();
-  await expect(page.locator('canvas')).toBeVisible();await expect(page.locator('.fallback')).toHaveCount(0);
+  await expect(page.locator('canvas')).toBeVisible();await expect(page.locator('.canvas-wrap > .fallback')).toHaveCount(0);
   await expect.poll(()=>page.locator('canvas').evaluate(c=>Boolean((c as HTMLCanvasElement).getContext('webgl2')))).toBe(true);
   await page.screenshot({path:`test-results/${id}-desktop.png`});
  }
@@ -34,14 +34,14 @@ test('rover routes, hand grasp and six sensors',async({page})=>{
  await page.getByRole('button',{name:'Extra obstacle'}).click();await page.getByRole('button',{name:/Robotic hand/}).click();await page.getByRole('button',{name:'Close hand',exact:true}).click();await expect(page.getByRole('slider',{name:'Finger flexion',exact:true})).toHaveValue('78');
  await page.getByRole('button',{name:'Open hand',exact:true}).click();await expect(page.getByRole('slider',{name:'Finger flexion',exact:true})).toHaveValue('0');
  await page.getByRole('button',{name:/Sensors & perception/}).click();await page.getByRole('button',{name:'Start sensor stream'}).click();
- for(const name of ['LiDAR','RGB camera','Depth sensor','Ultrasonic','IMU','Force / torque']){await page.locator('.sensor-options').getByRole('button',{name:new RegExp(name+'$')}).click();await expect(page.locator('.sensor-readout')).toBeVisible();await expect(page.locator('.fallback')).toHaveCount(0);}
+ for(const name of ['LiDAR','RGB camera','Depth sensor','Ultrasonic','IMU','Force / torque']){await page.locator('.sensor-options').getByRole('button',{name:new RegExp(name+'$')}).click();await expect(page.locator('.sensor-readout')).toBeVisible();await expect(page.locator('.canvas-wrap > .fallback')).toHaveCount(0);}
  await page.screenshot({path:'test-results/sensor-stream.png'});
 });
 test('navigation, lessons, intelligence and camera controls',async({page})=>{
  await page.getByRole('button',{name:'Robotics Academy',exact:true}).click();await page.getByRole('button',{name:/Forward kinematics/}).click();await expect(page.getByRole('heading',{name:'Forward kinematics',exact:true})).toBeVisible();await page.getByRole('button',{name:'Try it in the laboratory'}).click();
  await page.getByRole('button',{name:'Intelligence',exact:true}).click();await page.getByRole('button',{name:'Run robot'}).click();await page.getByRole('button',{name:'Add obstacle'}).click();await expect(page.getByRole('button',{name:'Remove obstacle'})).toBeVisible();await page.screenshot({path:'test-results/intelligence.png'});
  await page.getByLabel('Close panel',{exact:true}).click();await page.getByRole('button',{name:'Camera',exact:true}).click();await page.getByRole('button',{name:'top view'}).click();await page.getByLabel('Fit robot to screen',{exact:true}).click();
- const canvas=page.locator('canvas'),box=await canvas.boundingBox();if(box){await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.mouse.move(box.x+box.width/2+70,box.y+box.height/2+30,{steps:8});await page.mouse.up();await page.mouse.wheel(0,-100);}await expect(page.locator('.fallback')).toHaveCount(0);
+ const canvas=page.locator('canvas'),box=await canvas.boundingBox();if(box){await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.mouse.move(box.x+box.width/2+70,box.y+box.height/2+30,{steps:8});await page.mouse.up();await page.mouse.wheel(0,-100);}await expect(page.locator('.canvas-wrap > .fallback')).toHaveCount(0);
 });
 test.describe('Mobile viewport',()=>{
  test.use({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
