@@ -1,15 +1,15 @@
 export type RobotId = 'humanoid' | 'arm' | 'rover' | 'hand' | 'sensors';
 export const ROBOTS = [
- {id:'humanoid',name:'NEXUS H–01',type:'Humanoid robot',tag:'ARTICULATED SYSTEM',description:'Precision in every movement.',detail:'Explore an articulated humanoid, from its cervical gimbal to its ankle actuators.',color:'#00E5FF',dof:'17',icon:'humanoid'},
- {id:'arm',name:'AXIS R–06',type:'Industrial arm',tag:'MANIPULATION SYSTEM',description:'Six axes. Endless possibilities.',detail:'Operate a serial manipulator, solve position targets and transfer a payload.',color:'#FF9A2F',dof:'6',icon:'arm'},
- {id:'rover',name:'TERRA X–04',type:'Autonomous rover',tag:'MOBILE ROBOTICS',description:'Find a way forward.',detail:'Navigate a changing obstacle field with A* planning and differential steering.',color:'#00E5FF',dof:'2',icon:'rover'},
- {id:'hand',name:'DEXTER H–05',type:'Robotic hand',tag:'DEXTEROUS MANIPULATION',description:'Engineering a human touch.',detail:'Explore coupled finger joints, tendon drives and a coordinated grasp.',color:'#C6D3DF',dof:'5',icon:'hand'},
- {id:'sensors',name:'SENSE P–06',type:'Sensors & perception',tag:'PERCEPTION SYSTEM',description:'A different way to see.',detail:'Explore six simulated sensors and the measurements that guide robot behavior.',color:'#8B5CF6',dof:'6',icon:'sensors'},
+ {id:'humanoid',name:'NEXUS H–01',type:'Humanoid robot',tag:'ARTICULATED SYSTEM',description:'Precision in every movement.',detail:'Explore an articulated humanoid, from its cervical gimbal to its ankle actuators.',color:'#355F48',dof:'17',icon:'humanoid'},
+ {id:'arm',name:'AXIS R–06',type:'Industrial arm',tag:'MANIPULATION SYSTEM',description:'Six axes. Endless possibilities.',detail:'Operate a serial manipulator, solve position targets and transfer a payload.',color:'#C17443',dof:'6',icon:'arm'},
+ {id:'rover',name:'TERRA X–04',type:'Autonomous rover',tag:'MOBILE ROBOTICS',description:'Find a way forward.',detail:'Navigate a changing obstacle field with A* planning and differential steering.',color:'#355F48',dof:'2',icon:'rover'},
+ {id:'hand',name:'DEXTER H–05',type:'Robotic hand',tag:'DEXTEROUS MANIPULATION',description:'Engineering a human touch.',detail:'Explore coupled finger joints, tendon drives and a coordinated grasp.',color:'#D8D7CA',dof:'5',icon:'hand'},
+ {id:'sensors',name:'SENSE P–06',type:'Sensors & perception',tag:'PERCEPTION SYSTEM',description:'A different way to see.',detail:'Explore six simulated sensors and the measurements that guide robot behavior.',color:'#8F9E51',dof:'6',icon:'sensors'},
 ] as const;
 export const SENSORS = [
  {id:'lidar',name:'LiDAR',unit:'m',description:'A rotating laser samples the distance to the first surface along each ray. This simulator raycasts against the obstacle geometry; it does not model reflectivity or noise.'},
  {id:'rgb',name:'RGB camera',unit:'RGB',description:'A pinhole-style camera view conveys visible color and object boundaries. The projected boxes use known scene geometry; no recognition model is running.'},
- {id:'depth',name:'Depth sensor',unit:'m',description:'Depth encodes distance along viewing rays. Near returns appear cyan; farther returns shift toward violet. These values come from virtual geometry.'},
+ {id:'depth',name:'Depth sensor',unit:'m',description:'Depth encodes distance along viewing rays. Near returns appear yellow-green; farther returns shift toward deep green. These values come from virtual geometry.'},
  {id:'ultrasonic',name:'Ultrasonic',unit:'m',description:'A simplified directional range measurement estimates echo flight time using t = 2d / 343 at approximately 20°C. Beam spread and multipath are omitted.'},
  {id:'imu',name:'IMU',unit:'°',description:'An IMU combines angular-rate and acceleration measurements. Here the displayed roll and pitch are derived from a simulated orientation, without drift or sensor fusion.'},
  {id:'force',name:'Force / torque',unit:'N',description:'A virtual compliant probe produces a Hooke-law force, F = kx. Torque is the force multiplied by its perpendicular lever arm. This is an illustrative contact model.'},

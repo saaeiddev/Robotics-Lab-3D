@@ -11,24 +11,24 @@ import { obstacles, rangeRay } from './engine/math';
 
 function Lighting(){
  const {gl,scene}=useThree();
- useEffect(()=>{const pmrem=new T.PMREMGenerator(gl),room=new RoomEnvironment(),env=pmrem.fromScene(room,.04);scene.environment=env.texture;scene.environmentIntensity=.55;room.dispose();pmrem.dispose();return()=>{scene.environment=null;env.dispose();};},[gl,scene]);
- return <><ambientLight intensity={.45}/><hemisphereLight args={['#c5eaff','#10131b',1.3]}/><spotLight position={[3,7,4]} intensity={85} angle={.55} penumbra={.9} castShadow shadow-mapSize={[1024,1024]} shadow-bias={-.001}/><pointLight position={[-3,3,-2]} color="#00b7e8" intensity={15}/><pointLight position={[4,2,-3]} color="#8b5cf6" intensity={12}/><directionalLight position={[-4,4,5]} intensity={2.1} color="#deefff"/></>;
+ useEffect(()=>{const pmrem=new T.PMREMGenerator(gl),room=new RoomEnvironment(),env=pmrem.fromScene(room,.04);scene.environment=env.texture;scene.environmentIntensity=.75;room.dispose();pmrem.dispose();return()=>{scene.environment=null;env.dispose();};},[gl,scene]);
+ return <><ambientLight intensity={.7}/><hemisphereLight args={['#fffbed','#707c63',1.4]}/><spotLight position={[3,7,4]} intensity={95} color="#fff8df" angle={.55} penumbra={1} castShadow shadow-mapSize={[1024,1024]} shadow-bias={-.001}/><directionalLight position={[-4,4,5]} intensity={2.4} color="#eef5e7"/><directionalLight position={[1,3,-4]} intensity={2} color="#e9e7ca"/></>;
 }
 function Room(){
  const robot=useLab(s=>s.robot);const r=robot==='rover'||robot==='sensors'?4.8:2.1;
- return <group><mesh rotation={[-Math.PI/2,0,0]} position={[0,-.18,0]} receiveShadow><planeGeometry args={[40,40]}/><meshStandardMaterial color="#0c131d" metalness={.7} roughness={.45}/></mesh>
- <gridHelper args={[30,40,'#263544','#172330']} position={[0,-.17,0]}/>
- <mesh position={[0,-.14,0]} receiveShadow><cylinderGeometry args={[r,r+.1,.2,64]}/><meshStandardMaterial color="#141f2b" roughness={.36} metalness={.75}/></mesh>
- <mesh position={[0,-.027,0]} rotation={[-Math.PI/2,0,0]}><ringGeometry args={[r-.04,r,96]}/><meshBasicMaterial color="#00d0e3" transparent opacity={.65}/></mesh>
- <mesh position={[0,-.022,0]} rotation={[-Math.PI/2,0,0]}><ringGeometry args={[r-.26,r-.25,96]}/><meshBasicMaterial color="#547c91" transparent opacity={.6}/></mesh>
- {Array.from({length:48},(_,i)=>{const a=i/48*Math.PI*2;return <mesh key={i} position={[Math.sin(a)*(r-.16),-.018,Math.cos(a)*(r-.16)]} rotation={[-Math.PI/2,0,-a]}><planeGeometry args={[.012,i%4===0?.12:.055]}/><meshBasicMaterial color={i%4===0?'#00cfe4':'#41566a'}/></mesh>;})}
- <group position={[0,0,-6]}>{[-6,-3,0,3,6].map((x,i)=><group key={x}><mesh position={[x,2.5,0]}><boxGeometry args={[.12,5,.13]}/><meshStandardMaterial color="#263544" metalness={.8} roughness={.4}/></mesh><mesh position={[x-.03,2.5,.075]}><boxGeometry args={[.02,3.7,.015]}/><meshBasicMaterial color={i%2?'#4271a1':'#176c79'}/></mesh></group>)}<mesh position={[0,4.8,0]}><boxGeometry args={[13,.12,.4]}/><meshStandardMaterial color="#1d2e3e"/></mesh><mesh position={[0,4.72,.17]}><boxGeometry args={[11,.025,.04]}/><meshBasicMaterial color="#49748c"/></mesh></group>
+ return <group><mesh rotation={[-Math.PI/2,0,0]} position={[0,-.18,0]} receiveShadow><planeGeometry args={[80,80]}/><meshStandardMaterial color="#e0e1d4" metalness={.05} roughness={.92}/></mesh>
+ <gridHelper args={[30,40,'#a5af9a','#c3c9b8']} position={[0,-.17,0]}/>
+ <mesh position={[0,-.14,0]} receiveShadow><cylinderGeometry args={[r,r+.04,.2,8]}/><meshStandardMaterial color="#234c3a" roughness={.6} metalness={.3}/></mesh>
+ <mesh position={[0,-.035,0]} receiveShadow><cylinderGeometry args={[r-.025,r-.025,.016,8]}/><meshStandardMaterial color="#d0d4bf" roughness={.68} metalness={.18}/></mesh>
+ <mesh position={[0,-.022,0]} rotation={[-Math.PI/2,0,0]}><ringGeometry args={[r*.77,r*.775,96]}/><meshBasicMaterial color="#7e9077"/></mesh>
+ {Array.from({length:48},(_,i)=>{const a=i/48*Math.PI*2;return <mesh key={i} position={[Math.sin(a)*(r*.83),-.018,Math.cos(a)*(r*.83)]} rotation={[-Math.PI/2,0,-a]}><planeGeometry args={[.012,i%4===0?.12:.055]}/><meshBasicMaterial color={i%4===0?'#315c40':'#89987b'}/></mesh>;})}
+ {[-1,1].map(x=><group key={x} position={[x*(r*.78),-.015,0]}><mesh rotation={[-Math.PI/2,0,0]}><planeGeometry args={[.13,.45]}/><meshBasicMaterial color="#c9dc6f"/></mesh></group>)}
  </group>;
 }
 function Course(){
  const robot=useLab(s=>s.robot),extra=useLab(s=>s.obstacle);const interactive=robot==='rover';
  return <group>
- {obstacles(extra).map((o,i)=><group key={i} position={[o.x,0,o.z]}><mesh position={[0,o.h/2,0]} castShadow receiveShadow><boxGeometry args={[o.w,o.h,o.d]}/><meshStandardMaterial color={i===3?'#6b432a':'#263549'} metalness={.55} roughness={.4}/></mesh><mesh position={[0,o.h+.01,0]} rotation={[-Math.PI/2,0,0]}><planeGeometry args={[o.w*.85,o.d*.85]}/><meshStandardMaterial color="#182432"/></mesh><mesh position={[0,o.h+.02,o.d*.32]}><boxGeometry args={[o.w*.8,.02,.035]}/><meshBasicMaterial color={i===3?'#ff9a2f':'#00a8c1'}/></mesh></group>)}
+ {obstacles(extra).map((o,i)=><group key={i} position={[o.x,0,o.z]}><mesh position={[0,o.h/2,0]} castShadow receiveShadow><boxGeometry args={[o.w,o.h,o.d]}/><meshStandardMaterial color={i===3?'#a16c43':'#71816a'} metalness={.55} roughness={.4}/></mesh><mesh position={[0,o.h+.01,0]} rotation={[-Math.PI/2,0,0]}><planeGeometry args={[o.w*.85,o.d*.85]}/><meshStandardMaterial color="#c6cfb8"/></mesh><mesh position={[0,o.h+.02,o.d*.32]}><boxGeometry args={[o.w*.8,.02,.035]}/><meshBasicMaterial color={i===3?'#bd6b3b':'#ccd963'}/></mesh></group>)}
  {interactive&&<mesh rotation={[-Math.PI/2,0,0]} position={[0,-.005,0]} onDoubleClick={e=>{e.stopPropagation();useLab.setState({goal:[e.point.x,e.point.z],notice:'Waypoint updated. A* route recalculated.'});}}><planeGeometry args={[8,8]}/><meshBasicMaterial transparent opacity={0} depthWrite={false}/></mesh>}
  </group>;
 }
@@ -62,14 +62,14 @@ function SensorVisual({sim}:{sim:Simulation}){
   line.current.geometry.attributes.position.needsUpdate=true;points.current.geometry.attributes.position.needsUpdate=true;
  });
  if(!visible)return null;
- return <group><lineSegments ref={line} frustumCulled={false}><bufferGeometry><bufferAttribute attach="attributes-position" args={[positions,3]}/></bufferGeometry><lineBasicMaterial color={sensor==='depth'?'#8b5cf6':'#00e5ff'} transparent opacity={.16} depthWrite={false}/></lineSegments><points ref={points} frustumCulled={false}><bufferGeometry><bufferAttribute attach="attributes-position" args={[dots,3]}/></bufferGeometry><pointsMaterial color="#00e5ff" size={.045} sizeAttenuation/></points></group>;
+ return <group><lineSegments ref={line} frustumCulled={false}><bufferGeometry><bufferAttribute attach="attributes-position" args={[positions,3]}/></bufferGeometry><lineBasicMaterial color={sensor==='depth'?'#758f43':'#406c35'} transparent opacity={.16} depthWrite={false}/></lineSegments><points ref={points} frustumCulled={false}><bufferGeometry><bufferAttribute attach="attributes-position" args={[dots,3]}/></bufferGeometry><pointsMaterial color="#406c35" size={.045} sizeAttenuation/></points></group>;
 }
 function SensorSpecial({sim}:{sim:Simulation}){
  const sensor=useLab(s=>s.sensor),visible=useLab(s=>s.sensorsVisible);const orientation=useRef<T.Group>(null),probe=useRef<T.Group>(null);
  useFrame(()=>{if(orientation.current)orientation.current.rotation.set(sim.roll*Math.PI/180,0,sim.pitch*Math.PI/180);if(probe.current)probe.current.position.y=1.4-Math.abs(Math.sin(sim.clock))*.35;});
  if(!visible)return null;
- if(sensor==='imu')return <group position={[1.5,1.4,-1.8]}><group ref={orientation}><axesHelper args={[1]}/><mesh><boxGeometry args={[.6,.12,.45]}/><meshStandardMaterial color="#8b5cf6" metalness={.5} roughness={.35}/></mesh></group><Html position={[0,1.1,0]} center><span className="target-label">IMU / ORIENTATION</span></Html></group>;
- if(sensor==='force')return <group position={[-3,0,-2]}><mesh position={[0,.55,0]}><cylinderGeometry args={[.3,.3,.7,24]}/><meshStandardMaterial color="#293e52"/></mesh><group ref={probe}><mesh><cylinderGeometry args={[.07,.07,1,16]}/><meshStandardMaterial color="#bccbd6" metalness={.8} roughness={.2}/></mesh><mesh position={[0,.6,0]} rotation={[Math.PI,0,0]}><coneGeometry args={[.16,.3,12]}/><meshBasicMaterial color="#ff9a2f"/></mesh></group><Html position={[0,2.2,0]} center><span className="target-label">CONTACT / F = kx</span></Html></group>;
+ if(sensor==='imu')return <group position={[1.5,1.4,-1.8]}><group ref={orientation}><axesHelper args={[1]}/><mesh><boxGeometry args={[.6,.12,.45]}/><meshStandardMaterial color="#758f43" metalness={.5} roughness={.35}/></mesh></group><Html position={[0,1.1,0]} center><span className="target-label">IMU / ORIENTATION</span></Html></group>;
+ if(sensor==='force')return <group position={[-3,0,-2]}><mesh position={[0,.55,0]}><cylinderGeometry args={[.3,.3,.7,24]}/><meshStandardMaterial color="#526951"/></mesh><group ref={probe}><mesh><cylinderGeometry args={[.07,.07,1,16]}/><meshStandardMaterial color="#c2c9b8" metalness={.8} roughness={.2}/></mesh><mesh position={[0,.6,0]} rotation={[Math.PI,0,0]}><coneGeometry args={[.16,.3,12]}/><meshBasicMaterial color="#bd6b3b"/></mesh></group><Html position={[0,2.2,0]} center><span className="target-label">CONTACT / F = kx</span></Html></group>;
  return null;
 }
 function RenderPass({sim}:{sim:Simulation}){
@@ -90,7 +90,7 @@ function Target(){
  const target=useLab(s=>s.target),active=useLab(s=>s.ik),stopped=useLab(s=>s.stopped);const {controls}=useThree();const dragging=useRef(false);
  if(!active)return null;
  const release=(e:ThreeEvent<PointerEvent>)=>{dragging.current=false;(e.target as unknown as Element).releasePointerCapture?.(e.pointerId);if(controls)(controls as unknown as {enabled:boolean}).enabled=true;};
- return <group position={target}><mesh onPointerDown={e=>{if(stopped)return;e.stopPropagation();dragging.current=true;(e.target as unknown as Element).setPointerCapture?.(e.pointerId);if(controls)(controls as unknown as {enabled:boolean}).enabled=false;}} onPointerUp={release} onPointerMove={e=>{if(!dragging.current)return;e.stopPropagation();const p=new T.Vector3();if(e.ray.intersectPlane(new T.Plane(new T.Vector3(0,1,0),-target[1]),p))useLab.setState({target:[p.x,target[1],p.z]});}}><sphereGeometry args={[.12,16,16]}/><meshBasicMaterial color="#00e5ff" wireframe/></mesh><Html position={[.15,.15,0]}><span className="target-label">IK TARGET</span></Html><mesh rotation={[-Math.PI/2,0,0]}><torusGeometry args={[.22,.01,6,24]}/><meshBasicMaterial color="#00e5ff"/></mesh></group>;
+ return <group position={target}><mesh onPointerDown={e=>{if(stopped)return;e.stopPropagation();dragging.current=true;(e.target as unknown as Element).setPointerCapture?.(e.pointerId);if(controls)(controls as unknown as {enabled:boolean}).enabled=false;}} onPointerUp={release} onPointerMove={e=>{if(!dragging.current)return;e.stopPropagation();const p=new T.Vector3();if(e.ray.intersectPlane(new T.Plane(new T.Vector3(0,1,0),-target[1]),p))useLab.setState({target:[p.x,target[1],p.z]});}}><sphereGeometry args={[.12,16,16]}/><meshBasicMaterial color="#406c35" wireframe/></mesh><Html position={[.15,.15,0]}><span className="target-label">IK TARGET</span></Html><mesh rotation={[-Math.PI/2,0,0]}><torusGeometry args={[.22,.01,6,24]}/><meshBasicMaterial color="#406c35"/></mesh></group>;
 }
 function Robot({model,sim}:{model:Model;sim:Simulation}){
  const selected=useLab(s=>s.selected),hovered=useLab(s=>s.hovered),xray=useLab(s=>s.xray),labels=useLab(s=>s.labels),robot=useLab(s=>s.robot),envelope=useLab(s=>s.envelope);
@@ -98,7 +98,7 @@ function Robot({model,sim}:{model:Model;sim:Simulation}){
  useEffect(()=>{
   const originals=new Map<T.Mesh,T.Material|T.Material[]>();const clones:T.Material[]=[];
   model.root.traverse(o=>{if(o instanceof T.Mesh){const material=o.material as T.MeshStandardMaterial;originals.set(o,material);const m=material.clone();const sel=o.userData.component===selected,hov=o.userData.component===hovered;
-   if(sel||hov){m.emissive.set(sel?'#006675':'#16404a');m.emissiveIntensity=sel?.85:.5;}
+   if(sel||hov){m.emissive.set(sel?'#758b22':'#405e35');m.emissiveIntensity=sel?.85:.5;}
    if(xray){m.transparent=true;m.opacity=.28;m.depthWrite=false;}
    o.material=m;clones.push(m);
   }});return()=>{originals.forEach((m,o)=>{o.material=m;});clones.forEach(m=>m.dispose());};
@@ -110,8 +110,8 @@ function Robot({model,sim}:{model:Model;sim:Simulation}){
  const selectedPart=model.parts.find(p=>p.id===selected);const labelPos=selectedPart?.group.getWorldPosition(new T.Vector3());
  return <><primitive object={model.root} onClick={(e:ThreeEvent<MouseEvent>)=>{e.stopPropagation();if(e.object.userData.component)useLab.setState({selected:e.object.userData.component,notice:'Component selected. Inspector updated.'});}} onPointerOver={(e:ThreeEvent<PointerEvent>)=>{e.stopPropagation();useLab.setState({hovered:e.object.userData.component??null});document.body.style.cursor='pointer';}} onPointerOut={()=>{useLab.setState({hovered:null});document.body.style.cursor='auto';}}/>
  {labels&&selectedPart&&labelPos&&<Html position={labelPos.toArray()} center distanceFactor={7} style={{pointerEvents:'none'}}><div className="component-label">{selectedPart.name}<span>COMPONENT SELECTED</span></div></Html>}
- {robot==='arm'&&<><Target/>{envelope&&<mesh position={[0,1,0]}><sphereGeometry args={[2.7,24,12,0,Math.PI*2,0,Math.PI/2]}/><meshBasicMaterial color="#00e5ff" wireframe transparent opacity={.08} depthWrite={false}/></mesh>}{[-1,1].map(s=><mesh key={s} position={[s*1.3,.08,1.1]}><boxGeometry args={[.65,.13,.65]}/><meshStandardMaterial color="#23364b"/></mesh>)}</>}
- {robot==='rover'&&route.length>1&&<Line points={route} color="#00e5ff" lineWidth={2}/>} 
+ {robot==='arm'&&<><Target/>{envelope&&<mesh position={[0,1,0]}><sphereGeometry args={[2.7,24,12,0,Math.PI*2,0,Math.PI/2]}/><meshBasicMaterial color="#406c35" wireframe transparent opacity={.08} depthWrite={false}/></mesh>}{[-1,1].map(s=><mesh key={s} position={[s*1.3,.08,1.1]}><boxGeometry args={[.65,.13,.65]}/><meshStandardMaterial color="#86977a"/></mesh>)}</>}
+ {robot==='rover'&&route.length>1&&<Line points={route} color="#406c35" lineWidth={2}/>}
  {(robot==='rover'||robot==='sensors')&&<SensorVisual sim={sim}/>}
  </>;
 }
@@ -121,6 +121,6 @@ export default function Scene({model}:{model:Model}){
  useEffect(()=>{const handle=()=>setError(true);window.addEventListener('webglcontextlost',handle);return()=>window.removeEventListener('webglcontextlost',handle);},[]);
  if(error)return <div className="fallback"><h2>Graphics session interrupted</h2><p>Your device lost its WebGL context. Reload to reopen the lab.</p><button onClick={()=>location.reload()}>Reload laboratory</button></div>;
  return <Canvas shadows dpr={[1,1.5]} camera={{position:[4.2,3.5,6.5],fov:36,near:.05,far:80}} gl={{antialias:true,alpha:true,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.setClearColor('#000000',0);gl.domElement.addEventListener('webglcontextlost',()=>setError(true));}} fallback={<div className="fallback">WebGL is unavailable. Enable hardware acceleration or try a supported browser. The academy remains available.</div>} onPointerMissed={()=>useLab.setState({selected:null})}>
- <fog attach="fog" args={['#0b141f',14,32]}/><Suspense fallback={null}><Lighting/><Room/>{(robot==='rover'||robot==='sensors')&&<Course/>}<Robot model={model} sim={sim}/>{robot==='sensors'&&<SensorSpecial sim={sim}/>}<RenderPass sim={sim}/><CameraRig model={model} sim={sim}/><Quality/></Suspense>
+ <fog attach="fog" args={['#e7e8dc',14,32]}/><Suspense fallback={null}><Lighting/><Room/>{(robot==='rover'||robot==='sensors')&&<Course/>}<Robot model={model} sim={sim}/>{robot==='sensors'&&<SensorSpecial sim={sim}/>}<RenderPass sim={sim}/><CameraRig model={model} sim={sim}/><Quality/></Suspense>
  </Canvas>;
 }

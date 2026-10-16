@@ -4,7 +4,7 @@ import type { RobotId } from '../data';
 import { applyJoint, type Joint } from './math';
 export type Part={id:string;name:string;group:T.Group;home:T.Vector3;explode:T.Vector3;description:string;material:string};
 export type Model={root:T.Group;parts:Part[];joints:Joint[];tip:T.Group;wheels:T.Group[];grips:T.Group[];sensor:T.Group;payload:T.Group;dimensions:[number,number,number];dispose:()=>void};
-const COLORS={silver:'#bccbd6',white:'#e4edf2',dark:'#111b25',black:'#070d14',cyan:'#00e5ff',orange:'#ff9a2f',violet:'#8b5cf6',rubber:'#18202a'};
+const COLORS={silver:'#b7beb0',white:'#e9e6d6',dark:'#264637',black:'#101c17',cyan:'#c7db65',orange:'#bf7448',violet:'#8c9f52',rubber:'#26302a'};
 type Color=keyof typeof COLORS;
 export function buildRobot(id:RobotId):Model{
  const root=new T.Group(),parts:Part[]=[],joints:Joint[]=[],wheels:T.Group[]=[],grips:T.Group[]=[];
@@ -13,7 +13,7 @@ export function buildRobot(id:RobotId):Model{
  const brushed=new T.DataTexture(textureData,64,64);brushed.needsUpdate=true;brushed.wrapS=brushed.wrapT=T.RepeatWrapping;brushed.repeat.set(4,4);
  const geo=(key:string,fn:()=>T.BufferGeometry)=>{if(!geometries.has(key))geometries.set(key,fn());return geometries.get(key)!;};
  const mats=new Map<string,T.MeshStandardMaterial>();
- const mat=(color:Color,glow=false)=>{const k=color+glow;if(!mats.has(k)){const m=new T.MeshStandardMaterial({color:COLORS[color],metalness:color==='rubber'?.15:.65,roughness:glow?.28:color==='dark'?.5:.33,emissive:glow?COLORS[color]:'#000',emissiveIntensity:glow?2.1:0,roughnessMap:['silver','white'].includes(color)?brushed:null});mats.set(k,m);materials.push(m);}return mats.get(k)!;};
+ const mat=(color:Color,glow=false)=>{const k=color+glow;if(!mats.has(k)){const m=new T.MeshStandardMaterial({color:COLORS[color],metalness:color==='rubber'?.08:.48,roughness:glow?.38:color==='dark'?.58:.42,emissive:glow?COLORS[color]:'#000',emissiveIntensity:glow?.5:0,roughnessMap:['silver','white'].includes(color)?brushed:null});mats.set(k,m);materials.push(m);}return mats.get(k)!;};
  function mesh(parent:T.Object3D,g:T.BufferGeometry,color:Color,pos:[number,number,number]=[0,0,0],glow=false){const m=new T.Mesh(g,mat(color,glow));m.position.set(...pos);m.castShadow=!glow;m.receiveShadow=true;parent.add(m);return m;}
  function box(parent:T.Object3D,size:[number,number,number],pos:[number,number,number],color:Color='silver',glow=false){return mesh(parent,geo('b'+size.join(','),()=>new RoundedBoxGeometry(...size,2,Math.min(...size)*.12)),color,pos,glow);}
  function cyl(parent:T.Object3D,r:number,h:number,pos:[number,number,number],color:Color='dark',axis:'x'|'y'|'z'='y',glow=false){const m=mesh(parent,geo('c'+r+','+h,()=>new T.CylinderGeometry(r,r,h,24)),color,pos,glow);if(axis==='x')m.rotation.z=Math.PI/2;if(axis==='z')m.rotation.x=Math.PI/2;return m;}
