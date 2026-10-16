@@ -48,7 +48,7 @@ test.describe('Mobile viewport',()=>{
  test('drawers, robot selection and emergency control remain usable',async({page})=>{
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
   await page.screenshot({path:'test-results/humanoid-mobile.png',fullPage:true});
-  await page.getByRole('button',{name:'Controls',exact:true}).click();await page.getByRole('button',{name:/Robotic hand/}).click();await expect(page.locator('.left-panel')).not.toBeVisible();
+  await page.getByRole('button',{name:/Robotic hand/}).click();await page.getByRole('button',{name:'Controls',exact:true}).click();await expect(page.getByRole('button',{name:'Close hand',exact:true})).toBeVisible();await page.getByLabel('Close controls',{exact:true}).click();await expect(page.locator('.left-panel')).not.toBeVisible();
   await page.getByRole('button',{name:'Inspector',exact:true}).click();await page.getByLabel('Select component',{exact:true}).selectOption('palm');await expect(page.getByRole('heading',{name:'Metacarpal frame'})).toBeVisible();await page.getByLabel('Close inspector',{exact:true}).click();
   await page.getByRole('button',{name:'E-Stop',exact:true}).click();await expect(page.getByLabel('Start simulation')).toBeDisabled();await page.getByLabel('Reset robot',{exact:true}).click();await page.screenshot({path:'test-results/hand-mobile.png',fullPage:true});
  });

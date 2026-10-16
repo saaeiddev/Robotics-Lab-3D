@@ -142,3 +142,7 @@ Keyboard labels, range inputs, active/disabled states, dialog focus trapping, to
 
 **Amir Saeid Dehghan**
 Created by Amir Saeid Dehghan.
+
+## Instrument workbench visual design
+
+The interface uses warm ivory, forest green and citron, with original mechanical system icons, a horizontal robot selector, a large illuminated 3D workbench, a right-side control desk and a technical observation deck. On narrow screens the controls and inspector open as drawers. Robot models use coordinated ceramic, green-metal and brass finishes; the simulation and educational features remain available.

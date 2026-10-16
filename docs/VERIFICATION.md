@@ -33,3 +33,10 @@ The exact repository exists and connected GitHub access allows source writes. Gi
 ## Physical devices
 
 Actual iPhone Safari, Android Chrome, macOS Safari and Windows GPU/browser combinations have not been tested. CI viewport emulation, if successful, is not physical-device certification.
+
+## 2026-10-16 — Instrument workbench redesign
+
+- Passed all 45 existing robotics and DOM integration tests after the layout and scene palette changes.
+- Passed TypeScript/production build and GitHub Pages asset path validation.
+- Updated the mobile acceptance flow to select a system in the new horizontal selector before opening its control drawer.
+- Local browser/WebGL visual QA was unavailable in this environment. The existing GitHub Actions acceptance job remains configured to capture desktop/mobile browser evidence; this entry does not claim those checks have passed.
